@@ -1,7 +1,5 @@
 \# Story 3: Rate a Book or Movie
 
-
-
 \## User Story
 
 
@@ -46,7 +44,7 @@ Tester: Ahmad Abu Eid
 
 
 
-&#x20;\*\*screen-all-overview.png:\*\* A complete storyboard canvas showing all initial wireframe screen layouts and user flow connections in one view.
+&#x20;\*\*screen-all-overview.jpeg:\*\* A complete storyboard canvas showing all initial wireframe screen layouts and user flow connections in one view.
 
 
 
