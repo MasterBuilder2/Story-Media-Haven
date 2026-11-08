@@ -40,6 +40,18 @@ then the system displays a message stating: "Your request has been submitted for
 4. System resumes the main flow.
 
 ## Screens
+1. Log in – publisher logs in to reach the submission portal.
+2. Log in failed – shown when the publisher's account can't be verified (Alternative flow 3).
+3. Submit form – publisher enters the media's metadata and submits it for review.
+4. Invalid metadata – missing or invalid fields are marked so the publisher can fix them (Alternative flow 1).
+5. Submitted for review – confirms the request was submitted and shows its status as Pending.
+6. Duplicate title – shown when the title already exists, so the publisher changes it (Alternative flow 2).
 
+ ## Roles
+   - Designer: Ahmad Abu Eid
+   - Tester: Pawel Sarwinski
 
-
+   ## Figma
+   -File: https://www.figma.com/design/vniuGeZt7iXipFkyMK23HL/Phase3.1_HiFi?node-id=0-1&p=f&t=h6EK44ne6hOLQ2u1-0
+   
+   -Prototype:  https://www.figma.com/design/vniuGeZt7iXipFkyMK23HL/Phase3.1_HiFi?node-id=0-1&t=h6EK44ne6hOLQ2u1-1
