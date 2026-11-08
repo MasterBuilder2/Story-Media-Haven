@@ -54,4 +54,4 @@ then the system displays a message stating: "Your request has been submitted for
    ## Figma
    -File: https://www.figma.com/design/vniuGeZt7iXipFkyMK23HL/Phase3.1_HiFi?node-id=0-1&p=f&t=h6EK44ne6hOLQ2u1-0
    
-   -Prototype:  https://www.figma.com/design/vniuGeZt7iXipFkyMK23HL/Phase3.1_HiFi?node-id=0-1&t=h6EK44ne6hOLQ2u1-1
+   -Prototype:  https://www.figma.com/proto/vniuGeZt7iXipFkyMK23HL/Phase3.1_HiFi?node-id=63-270&p=f&t=1fpQ9edMG2mzMcIa-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=63%3A270
