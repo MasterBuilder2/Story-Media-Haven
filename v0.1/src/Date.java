@@ -1,12 +1,14 @@
+import java.time.LocalDate;
 public class Date {
     private int day;
     private int month;
     private int year;
 
     public Date(){
-        this.day = 13;
-        this.month = 11;
-        this.year = 2026;
+        LocalDate today = LocalDate.now();
+        this.day = today.getDayOfMonth();
+        this.month = today.getMonthValue();
+        this.year = today.getYear();
     }
     public Date(int day, int month, int year){
         setDate(day,month,year);
