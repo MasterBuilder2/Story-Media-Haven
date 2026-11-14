@@ -70,4 +70,9 @@ public class Media {
             this.averageRating = (float) average;
         }
     }
+    //adding toString for Search class
+    @Override
+    public String toString(){
+        return getTitle() + ", " + getReleaseDate().toString() + ", " + getAverageRating();
+    }
 }
