@@ -15,6 +15,10 @@ public class Search {
         catelogDatabase.add(m);
     }
 
+    public ArrayList<Media> getCatelogDatabase() {
+        return catelogDatabase;
+    }
+
     public ArrayList<Media> searchByTitle(String query) {
         ArrayList<Media> results = new ArrayList<Media>();
         for (Media m : catelogDatabase) {
