@@ -1,9 +1,9 @@
 import java.util.*;
-public class main {
+public class Main {
     public static void main (String[] args){
         FR1();
     }
-    
+
     public static void FR1(){
         //Creating Media
         Book b1 = new Book("Siddhartha",new Date(1,10,1922),
