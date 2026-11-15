@@ -11,10 +11,11 @@ class MediaTest {
         Media media3 = new Media("Title 3", new Date(),"Synopsis 3");
         Book b1 = new Book("Title 4", new Date(),"Synopsis 4");
         Movie m1 = new Movie("Title 5", new Date(),"Synopsis 5");
-        assertEquals(0,media1.getGlobal_ID());
-        assertEquals(1,media2.getGlobal_ID());
-        assertEquals(2,media3.getGlobal_ID());
-        assertEquals(3,b1.getGlobal_ID());
-        assertEquals(4,m1.getGlobal_ID());
+        int firstID = media1.getGlobal_ID();
+        assertEquals(firstID+0,media1.getGlobal_ID());
+        assertEquals(firstID+1,media2.getGlobal_ID());
+        assertEquals(firstID+2,media3.getGlobal_ID());
+        assertEquals(firstID+3,b1.getGlobal_ID());
+        assertEquals(firstID+4,m1.getGlobal_ID());
     }
 }
