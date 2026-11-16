@@ -3,7 +3,7 @@ public class Console {
     private static final Scanner scan = new Scanner(System.in);
 
     public static void signUp(Scanner scan){
-        System.out.println("--- Publisher Sign Up ---");
+        System.out.println("--- Sign Up ---");
         String username = readNonEmpty(scan,"Username: ");
         String email = readNonEmpty(scan, "Email: ");
         while (!isValidEmail(email)) {
@@ -11,12 +11,28 @@ public class Console {
             email = readNonEmpty(scan, "Email: ");
         }
         String password = readNonEmpty(scan,"Password: ");
-        String companyName = readNonEmpty(scan,"Company Name: ");
-        Publisher publisher = new Publisher(username, email, password, companyName);
+        String type = readNonEmpty(scan, "Account type (1 = Reader, 2 = Publisher): ");
+        while (!type.equals("1") && !type.equals("2")) {
+            System.out.println("Please enter 1 or 2.");
+            type = readNonEmpty(scan, "Account type (1 = Reader, 2 = Publisher): ");
+        }
 
-        if(AuthenticationSystem.getSingleton().signUp(publisher)){
-            System.out.println("Account created successfully. Your publisher account is pending verification.");
-        }else{
+        Account account;
+        if (type.equals("2")) {
+            String companyName = readNonEmpty(scan, "Company name: ");
+            account = new Publisher(username, email, password, companyName);
+        } else {
+            account = new User(username, email, password);
+        }
+
+
+        if (AuthenticationSystem.getSingleton().signUp(account)) {
+            if (account instanceof Publisher) {
+                System.out.println("Account created. Your publisher account is pending verification.");
+            } else {
+                System.out.println("Account created. Welcome to Story Media Haven!");
+            }
+        } else {
             System.out.println("Username already taken. Please choose another one.");
         }
     }
@@ -33,7 +49,9 @@ public class Console {
             return null;
         }
 
-        if (AuthenticationSystem.getSingleton().isVerifiedPublisher(account)) {
+        if (!(account instanceof Publisher)) {
+            System.out.println("Welcome, " + account.getUsername() + ".");
+        } else if (AuthenticationSystem.getSingleton().isVerifiedPublisher(account)) {
             System.out.println("Welcome, " + account.getUsername() + ". You are a verified publisher.");
         } else {
             System.out.println("Welcome, " + account.getUsername() + ". Your publisher account is not verified yet.");
@@ -61,14 +79,18 @@ public class Console {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-
         Publisher verified = new Publisher("northlight", "rights@northlight.com", "pass1234", "Northlight Press");
         verified.setVerificationStatus(true);
         AuthenticationSystem.getSingleton().signUp(verified);
 
+        User reader = new User("reader1", "reader@mail.com", "pass1234");
+        AuthenticationSystem.getSingleton().signUp(reader);
+
         signUp(input);   // create an unverified publisher
-        login(input);    // try: wrong password, then each account
-        login(input);
+        login(input);    // wrong password
+        login(input);    // reader1 / pass1234
+        login(input);    // northlight / pass1234
+        login(input);    // the publisher you just signed up
     }
 
 
