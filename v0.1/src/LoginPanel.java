@@ -20,6 +20,9 @@ public class LoginPanel extends JPanel {
     public LoginPanel(){
         setLayout(new GridBagLayout());         //keep dialog box in the center of the window
         add(buildForm());
+        loginButton.addActionListener(e -> handleLogin());      //listener = makes button work
+        passwordField.addActionListener(e -> handleLogin());    //login button works when pressing enter not just the button
+
     }
 
     private JPanel buildForm(){
@@ -132,6 +135,44 @@ public class LoginPanel extends JPanel {
         }
     }
     //END OF CLASS
+
+    //actual implementation of login (making the button work)
+    private void handleLogin(){
+        clearError();
+        String username = usernameField.getText().trim();
+        String password = new String(passwordField.getPassword());
+        if (username.isEmpty() || password.isEmpty()) {
+            showError("Invalid information", "Please enter your username and password.");
+            return;
+        }
+
+        Account account = AuthenticationSystem.getSingleton().login(username, password);
+        if (account == null) {
+            //security measure by not determining which one is wrong
+            showError("Invalid username or password", "Check your details and try again.");
+            passwordField.setText("");
+            return;
+        }
+
+        if (!(account instanceof Publisher)) {
+            // temporary until Main is built then switches to the reader's screen
+            JOptionPane.showMessageDialog(this, "Welcome, " + account.getUsername() + ".");
+            return;
+        }
+
+        if (!AuthenticationSystem.getSingleton().isVerifiedPublisher(account)) {
+            //Alternative Flow 3 == publisher status verification fails
+            showError("We couldn't verify your publisher account",
+                    "Log in again to keep submitting your title.");
+            return;
+        }
+
+        //temporary until Main is built,then switches to the submit-media screen
+        JOptionPane.showMessageDialog(this, "Welcome, " + account.getUsername() + ". You are a verified publisher.");
+
+    }
+
+
 
     //temporary main for testing until we do the actual Main
     public static void main(String[] args) {
