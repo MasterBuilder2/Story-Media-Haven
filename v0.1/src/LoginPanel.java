@@ -1,146 +1,119 @@
-import javax.swing.*;
-import java.awt.*;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 
-public class LoginPanel extends JPanel {
-    private static final Color NAVY = new Color(35,48,68);
-    private static final Color BEIGE = new Color(242,243,237);
-    private static final Color RED = new Color(255,0,0);    //the login error warning pop-up
-    private static final Color DARK_TEXT = new Color(0x33, 0x33, 0x33);
+public class LoginPanel extends StackPane {
+    private static final String NAVY = "#233044";
+    private static final String BEIGE = "#F2F3ED";
+    private static final String DARK_TEXT = "#333333";
 
-    private final JTextField usernameField = new JTextField(20);
-    private final JPasswordField passwordField = new JPasswordField(20);
-    private final JButton loginButton = new JButton("Log in");
-    private final JPanel errorBox = new JPanel();
-    private final JLabel errorHeading = new JLabel();
-    private final JLabel errorDetail = new JLabel();
-
+    private final TextField usernameField = new TextField();
+    private final PasswordField passwordField = new PasswordField();
+    private final Button loginButton = new Button("Log in");
+    private final HBox errorBox = new HBox(14);           // 14px gap between the icon and the text
+    private final Label errorHeading = new Label();
+    private final Label errorDetail = new Label();
 
 
     public LoginPanel(){
-        setLayout(new GridBagLayout());         //keep dialog box in the center of the window
-        add(buildForm());
-        loginButton.addActionListener(e -> handleLogin());      //listener = makes button work
-        passwordField.addActionListener(e -> handleLogin());    //login button works when pressing enter not just the button
-
+        getChildren().add(buildForm());                      // StackPane keeps the form in the center of the window
+        loginButton.setOnAction(e -> handleLogin());         // makes the button work
+        passwordField.setOnAction(e -> handleLogin());       // pressing Enter in the password field also logs in
     }
 
-    private JPanel buildForm(){
-        JPanel form = new JPanel();
-        form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
-        JLabel title = new JLabel("Log in to continue");
-        title.setFont(title.getFont().deriveFont(Font.BOLD, 24f));
+    private VBox buildForm(){
+        VBox form = new VBox();                               // stacks items top to bottom, default left aligned
+        form.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);   // don't stretch to fill the whole window
 
+        Label title = new Label("Log in to continue");
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
-        loginButton.setBackground(NAVY);
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setOpaque(true);
-        loginButton.setBorderPainted(false);
+        usernameField.setPrefColumnCount(20);
+        passwordField.setPrefColumnCount(20);
 
-        form.add(title);
-        form.add(Box.createVerticalStrut(16));
-        form.add(buildErrorBox());
-        form.add(Box.createVerticalStrut(16));
-        form.add(new JLabel("Username"));
-        form.add(usernameField);
-        form.add(Box.createVerticalStrut(12));
-        form.add(new JLabel("Password"));
-        form.add(passwordField);
-        form.add(Box.createVerticalStrut(8));
-        //form.add(errorLabel);
-        form.add(Box.createVerticalStrut(8));
-        form.add(loginButton);
+        loginButton.setStyle("-fx-background-color: " + NAVY + "; -fx-text-fill: white;");
 
-        for (Component c : form.getComponents()) {
-            ((JComponent) c).setAlignmentX(Component.LEFT_ALIGNMENT);
-        }
+        form.getChildren().addAll(
+                title, spacer(16),
+                buildErrorBox(), new Label("Username"), usernameField, spacer(12),
+                new Label("Password"), passwordField, spacer(16), loginButton);
+
+        // Gap below the error box only while it's shown, so there's no empty space when it's hidden
+        VBox.setMargin(errorBox, new Insets(0, 0, 16, 0));
         return form;
+    }
 
+    // Fixed vertical gap (replaces Swing's Box.createVerticalStrut)
+    private static Region spacer(double height){
+        Region gap = new Region();
+        gap.setMinHeight(height);
+        gap.setPrefHeight(height);
+        return gap;
     }
 
 
-    private JPanel buildErrorBox() {
-        errorBox.setLayout(new BoxLayout(errorBox, BoxLayout.X_AXIS));   // icon left, text right
-        errorBox.setBackground(BEIGE);
-        errorBox.setOpaque(true);
-        errorBox.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.BLACK, 1, true),     //outline
-                BorderFactory.createEmptyBorder(12, 18, 12, 18)));    // padding inside the box
+    private HBox buildErrorBox() {
+        errorBox.setAlignment(Pos.CENTER_LEFT);                     // icon left, text right, vertically centered
+        errorBox.setPadding(new Insets(12, 18, 12, 18));            // padding inside the box
+        errorBox.setStyle("-fx-background-color: " + BEIGE + ";"
+                + "-fx-border-color: black; -fx-border-width: 1;"   // outline
+                + "-fx-border-radius: 4; -fx-background-radius: 4;");
 
-        errorHeading.setFont(errorHeading.getFont().deriveFont(Font.BOLD, 18f));
-        errorDetail.setFont(errorDetail.getFont().deriveFont(Font.PLAIN, 16f));
-        errorDetail.setForeground(DARK_TEXT);
+        errorHeading.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        errorDetail.setStyle("-fx-font-size: 16px; -fx-text-fill: " + DARK_TEXT + ";");
 
-        JPanel text = new JPanel();
-        text.setLayout(new BoxLayout(text, BoxLayout.Y_AXIS));
-        text.setOpaque(false);                                            // let the beige show through
-        text.add(errorHeading);
-        text.add(Box.createVerticalStrut(3));
-        text.add(errorDetail);
+        VBox text = new VBox(3, errorHeading, errorDetail);         // 3px gap between the two lines
 
-        errorBox.add(new CircleIcon("!", NAVY));
-        errorBox.add(Box.createHorizontalStrut(14));
-        errorBox.add(text);
+        errorBox.getChildren().addAll(new CircleIcon("!", NAVY), text);
 
-        errorBox.setVisible(false);                                       // doesn't show up until there is an error
+        errorBox.setVisible(false);                                 // doesn't show up until there is an error
+        errorBox.setManaged(false);                                 // and takes no space while hidden
         return errorBox;
     }
 
     void showError(String heading, String detail) {
         errorHeading.setText(heading);
         errorDetail.setText(detail);
-        // Full form width, but only as tall as its content
-        errorBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, errorBox.getPreferredSize().height));
+        errorBox.setManaged(true);
         errorBox.setVisible(true);
-        revalidate();
-        repaint();
     }
 
     void clearError() {
         errorBox.setVisible(false);
-        revalidate();
-        repaint();
+        errorBox.setManaged(false);
     }
 
 
     // Error exclamation point circle design
-    //CLASS
-    private static class CircleIcon extends JComponent {
-        private final String symbol;
-        private final Color color;
-
-        CircleIcon(String symbol, Color color) {
-            this.symbol = symbol;
-            this.color = color;
-            Dimension size = new Dimension(26, 26);
-            setPreferredSize(size);
-            setMinimumSize(size);
-            setMaximumSize(size);
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);  // smooth edges
-            g2.setColor(color);
-            g2.fillOval(0, 0, getWidth(), getHeight());
-
-            g2.setColor(Color.WHITE);
-            g2.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-            FontMetrics fm = g2.getFontMetrics();
-            int x = (getWidth() - fm.stringWidth(symbol)) / 2;                 // center horizontally
-            int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();      // center vertically
-            g2.drawString(symbol, x, y);
-            g2.dispose();
+    private static class CircleIcon extends StackPane {
+        CircleIcon(String symbol, String color) {
+            Circle circle = new Circle(13, Color.web(color));        // 26px across
+            Label mark = new Label(symbol);
+            mark.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+            getChildren().addAll(circle, mark);                     // StackPane centers the "!" on the circle
         }
     }
-    //END OF CLASS
+
 
     //actual implementation of login (making the button work)
     private void handleLogin(){
         clearError();
         String username = usernameField.getText().trim();
-        String password = new String(passwordField.getPassword());
+        String password = passwordField.getText();
         if (username.isEmpty() || password.isEmpty()) {
             showError("Invalid information", "Please enter your username and password.");
             return;
@@ -156,7 +129,7 @@ public class LoginPanel extends JPanel {
 
         if (!(account instanceof Publisher)) {
             // temporary until Main is built then switches to the reader's screen
-            JOptionPane.showMessageDialog(this, "Welcome, " + account.getUsername() + ".");
+            new Alert(Alert.AlertType.INFORMATION, "Welcome, " + account.getUsername() + ".").showAndWait();
             return;
         }
 
@@ -168,25 +141,25 @@ public class LoginPanel extends JPanel {
         }
 
         //temporary until Main is built,then switches to the submit-media screen
-        JOptionPane.showMessageDialog(this, "Welcome, " + account.getUsername() + ". You are a verified publisher.");
-
+        new Alert(Alert.AlertType.INFORMATION,
+                "Welcome, " + account.getUsername() + ". You are a verified publisher.").showAndWait();
     }
 
 
 
     //temporary main for testing until we do the actual Main
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Story Media Haven");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1000, 700);
-            LoginPanel panel = new LoginPanel();
-            frame.add(panel);
-            frame.setLocationRelativeTo(null);   // open in the middle of the screen
-            frame.setVisible(true);
+        Application.launch(TestLauncher.class, args);
+    }
 
-        });
-
+    // JavaFX needs an Application class to open a window; this one only exists for testing
+    public static class TestLauncher extends Application {
+        @Override
+        public void start(Stage stage) {
+            stage.setTitle("Story Media Haven");
+            stage.setScene(new Scene(new LoginPanel(), 1000, 700));
+            stage.show();
+        }
     }
 }
 
