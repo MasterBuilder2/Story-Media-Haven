@@ -69,6 +69,9 @@ public class Media {
             average = (double) sum / reviewList.size();
             this.averageRating = (float) average;
         }
+        else{
+            this.averageRating = 0;
+        }
     }
     //adding toString for Search class
     @Override
