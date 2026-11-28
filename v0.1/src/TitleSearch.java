@@ -10,7 +10,7 @@ public class TitleSearch extends Application {
     private Stage primaryStage;
     private Scene searchScene;
     private ArrayList<Media> currentResults = new ArrayList<>();
-    public static User currentUser = new User("Tester1","private@gmail.com","1234Password");
+    public User currentUser = UserSession.getSINGLETON().getCurrentUser();
 
     @Override
     public void start(Stage primaryStage)
@@ -476,7 +476,8 @@ public class TitleSearch extends Application {
 
         //m1.addReview(new Review(4,"Nice",new Date(),currentUser));
         //m1.addReview(new Review(5,"Nice",new Date(),currentUser));
-        currentUser.submitReview(m1,5, "I really like it");
+        UserSession.getSINGLETON().setCurrentUser(u1);
+
         u1.submitReview(m1,3, "Not really my kind of story");
 
         Search.getSINGLETON().addMedia(b1);
